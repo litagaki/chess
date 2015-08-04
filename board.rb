@@ -52,4 +52,28 @@ class Board
     nil
   end
 
+  def move(start, end_pos)
+    piece = self[start]
+    raise ArgumentError.new("No piece at start") if piece.nil?
+    unless piece.moves.include?(end_pos)
+      raise ArgumentError.new("Piece cannot move to end position")
+    end
+
+    piece.position = end_pos
+    self[start] = nil
+    self[end_pos] = piece
+  end
+
+  def in_check?(color)
+    king = grid.flatten.select do |element|
+      element.class == King && element.color == color
+    end
+
+    king_pos = king.first.position
+    grid.flatten.compact.each do |element|
+      return true if element.color != color && element.moves.include?(king_pos)
+    end
+    false
+  end
+
 end

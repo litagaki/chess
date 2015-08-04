@@ -2,7 +2,7 @@ require 'byebug'
 require_relative 'board'
 
 class Piece
-  attr_accessor :position, :board
+  attr_accessor :board, :position
   attr_reader :color
 
   def initialize(position, color, board)
@@ -11,6 +11,7 @@ class Piece
     @board = board
     board[position] = self
   end
+
 
   def moves
     raise NotImplementedError

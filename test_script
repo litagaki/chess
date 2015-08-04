@@ -12,5 +12,9 @@ load 'pawn.rb'
 b = Board.new
 q = Queen.new([3,3], :white, b)
 bishop = Bishop.new([4,4],:black, b)
+k = King.new([3,4], :black, b)
+k = King.new([7,7],:white, b)
 r = Rook.new([5,5], :black, b)
 bishop.moves
+b.in_check?(:black)
+b.in_check?(:white)
