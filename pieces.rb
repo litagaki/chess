@@ -19,11 +19,12 @@ class Piece
   def move_into_check?(new_pos)
     temp_board = Board.dup(board)
     temp_board.move(position,new_pos)
-    
+
     temp_board.in_check?(color)
   end
 
   def valid_moves
+    moves.reject {|move| move_into_check?(move) }
   end
 
   def inspect
