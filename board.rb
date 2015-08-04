@@ -5,11 +5,28 @@ class Board
   attr_reader :grid
   #ROOK_POSITIONS = []
 
+  def self.dup(board)
+    new_board = Board.new
+
+    board.grid.each_with_index do |row, row_number|
+      row.each_with_index do |element, column_number|
+        if element
+          new_element = element.dup
+          new_element.board = new_board
+          new_board[[row_number,column_number]] = new_element
+        end
+      end
+    end
+
+    new_board
+  end
 
   def initialize
     @grid = Array.new(BOARD_LENGTH) { Array.new(BOARD_LENGTH) }
     #populate board
   end
+
+
 
   def [](pos)
     x,y = pos
@@ -39,7 +56,8 @@ class Board
 
   def render
     display_grid = grid.transpose.reverse
-    display_grid.each do |row|
+    display_grid.each_with_index do |row, row_number|
+        print "#{7-row_number}"
       row.each do |element|
         if element
           print " #{element.to_s} "
@@ -49,8 +67,11 @@ class Board
       end
       puts
     end
+    puts "  0  1  2  3  4  5  6  7"
     nil
   end
+
+
 
   def move(start, end_pos)
     piece = self[start]

@@ -18,3 +18,4 @@ r = Rook.new([5,5], :black, b)
 bishop.moves
 b.in_check?(:black)
 b.in_check?(:white)
+copy = Board.dup(b)
