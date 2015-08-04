@@ -2,16 +2,7 @@ require_relative 'sliding_pieces'
 require 'byebug'
 
 class Queen < SlidingPiece
-  DELTAS = [
-    [ 1,  1],
-    [-1, -1],
-    [ 1, -1],
-    [-1,  1],
-    [ 1,  0],
-    [-1,  0],
-    [ 0, -1],
-    [ 0,  1]
-  ]
+  DELTAS = ORTHOGONAL_DELTAS + DIAGONAL_DELTAS
 
   def to_s
     "Q"

@@ -1,0 +1,19 @@
+load 'board.rb'
+load 'pieces.rb'
+load 'stepping_pieces.rb'
+load 'sliding_pieces.rb'
+load 'king.rb'
+load 'knight.rb'
+load 'rook.rb'
+load 'bishop.rb'
+load 'queen.rb'
+load 'pawn.rb'
+
+b = Board.new
+q = Queen.new([3,3], :white, b)
+bishop = Bishop.new([4,4],:black, b)
+r = Rook.new([5,5], :black, b)
+q.moves.each do |new_pos|
+  queen = Queen.new(new_pos,:black,b)
+end
+bishop.moves

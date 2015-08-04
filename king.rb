@@ -12,10 +12,6 @@ class King < SteppingPiece
     [ 1,  1]
   ]
 
-  def moves
-    super
-  end
-
   def to_s
     "K"
   end
