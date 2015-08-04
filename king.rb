@@ -1,6 +1,4 @@
-require_relative 'pieces'
 require_relative 'stepping_pieces'
-require_relative 'board'
 
 class King < SteppingPiece
   DELTAS = [
@@ -13,4 +11,12 @@ class King < SteppingPiece
     [ 1,  0],
     [ 1,  1]
   ]
+
+  def moves
+    super
+  end
+
+  def to_s
+    "K"
+  end
 end
