@@ -75,6 +75,11 @@ class Board
 
   def move(start, end_pos)
     piece = self[start]
+
+    if piece.move_into_check?(end_pos)
+      raise ArgumentError.new("Moving into check!")
+    end
+
     raise ArgumentError.new("No piece at start") if piece.nil?
     unless piece.moves.include?(end_pos)
       raise ArgumentError.new("Piece cannot move to end position")
@@ -83,6 +88,21 @@ class Board
     piece.position = end_pos
     self[start] = nil
     self[end_pos] = piece
+  end
+
+  def move!(start, end_pos)
+    piece = self[start]
+    piece.position = end_pos
+    self[start] = nil
+    self[end_pos] = piece
+  end
+
+  def checkmate?(color)
+    return false unless in_check?(color)
+
+    current_pieces = grid.flatten.compact.select {|piece| piece.color == color }
+
+    current_pieces.all? {|piece| piece.valid_moves.empty? }
   end
 
   def in_check?(color)

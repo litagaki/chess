@@ -10,9 +10,9 @@ load 'queen.rb'
 load 'pawn.rb'
 
 b = Board.new
-q = Queen.new([3,3], :white, b)
-bishop = Bishop.new([4,4],:black, b)
-k = King.new([3,0], :black, b)
+r = Rook.new([7,7], :black, b)
+q = Queen.new([7,6], :black, b)
 k = King.new([6,6],:white, b)
-r = Rook.new([5,5], :black, b)
+a = Rook.new([5,5], :black, b)
+qaoeu = Queen.new([4,5], :black, b)
 k.move_into_check?([6,5])
