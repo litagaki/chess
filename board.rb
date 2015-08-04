@@ -24,6 +24,23 @@ class Board
   end
 
   def has_color_piece?(pos, color)
-    self[pos].color == color
+    self[pos] ? self[pos].color == color : false
   end
+
+  def render
+    display_grid = grid.transpose
+
+    display_grid.each do |row|
+      row.each do |element|
+        if element
+          print " #{element.to_s} "
+        else
+          print " _ "
+        end
+      end
+      puts
+    end
+
+  end
+
 end
