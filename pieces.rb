@@ -12,9 +12,18 @@ class Piece
     board[position] = self
   end
 
-
   def moves
     raise NotImplementedError
+  end
+
+  def move_into_check?(new_pos)
+    temp_board = Board.dup(board)
+    temp_board.move(position,new_pos)
+    
+    temp_board.in_check?(color)
+  end
+
+  def valid_moves
   end
 
   def inspect
