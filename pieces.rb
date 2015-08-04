@@ -16,6 +16,13 @@ class Piece
     raise MissingMethodError.new("Should have implemented subclass#move")
   end
 
+  def inspect
+    { :postion => position,
+      :color => color,
+      :type => self.class
+    }.inspect
+  end
+
 end
 
 
