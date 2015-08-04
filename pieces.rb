@@ -1,4 +1,5 @@
 require 'byebug'
+require_relative 'board'
 
 class Piece
   attr_accessor :position, :board
