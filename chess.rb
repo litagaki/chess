@@ -4,6 +4,11 @@ require_relative 'pieces'
 require_relative 'pawn'
 require_relative 'king'
 require_relative 'stepping_pieces'
+require_relative 'bishop'
+require_relative 'knight'
+require_relative 'queen'
+require_relative 'sliding_pieces'
+require_relative 'rook'
 
 class Chess
   attr_reader :white_player, :black_player
@@ -13,6 +18,7 @@ class Chess
     @white_player = HumanPlayer.new(:white)
     @black_player = HumanPlayer.new(:black)
     @board = Board.new
+    board.populate_board
     @current_player = white_player
   end
 
@@ -64,6 +70,4 @@ end
 c = Chess.new
 b = c.board
 
-k1 = King.new([3,3], :white, b)
-k2 = King.new([2,2], :black, b)
 c.play
