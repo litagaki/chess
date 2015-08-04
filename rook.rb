@@ -1,4 +1,4 @@
-require 'sliding_pieces'
+require_relative 'sliding_pieces'
 require 'byebug'
 
 class Rook < SlidingPiece
@@ -12,5 +12,5 @@ class Rook < SlidingPiece
   def to_s
     "R"
   end
-  
+
 end

@@ -23,6 +23,11 @@ class Board
     pos.all? { |coordinate| coordinate.between?(0, BOARD_LENGTH - 1) }
   end
 
+  def has_piece?(pos)
+    self[pos]
+  end
+
+
   def has_color_piece?(pos, color)
     self[pos] ? self[pos].color == color : false
   end
