@@ -5,7 +5,7 @@ class Rook < SlidingPiece
   DELTAS = ORTHOGONAL_DELTAS
 
   def to_s
-    "R"
+    color == :white ? "\u2656" : "\u265C"
   end
 
 end

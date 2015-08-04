@@ -13,6 +13,7 @@ class King < SteppingPiece
   ]
 
   def to_s
-    "K"
+    color == :white ? "\u2654" : "\u265A"
   end
+
 end

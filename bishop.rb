@@ -5,7 +5,7 @@ class Bishop < SlidingPiece
   DELTAS = DIAGONAL_DELTAS
 
   def to_s
-    "B"
+    color == :white ? "\u2657" : "\u265D"
   end
 
 end

@@ -13,7 +13,4 @@ b = Board.new
 q = Queen.new([3,3], :white, b)
 bishop = Bishop.new([4,4],:black, b)
 r = Rook.new([5,5], :black, b)
-q.moves.each do |new_pos|
-  queen = Queen.new(new_pos,:black,b)
-end
 bishop.moves

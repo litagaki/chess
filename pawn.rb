@@ -24,7 +24,7 @@ class Pawn < Piece
   end
 
   def to_s
-    "p"
+    color == :white ? "\u2659" : "\u265F"
   end
 
   private

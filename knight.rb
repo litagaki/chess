@@ -13,6 +13,6 @@ class Knight < SteppingPiece
   ]
 
   def to_s
-    "N"
+    color == :white ? "\u2657" : "\u265E"
   end
 end
