@@ -10,10 +10,10 @@ class Piece
     @board = board
   end
 
-  def move
+  def moves
     raise MissingMethodError.new("Should have implemented subclass#move")
   end
-  
+
 end
 
 
