@@ -1,3 +1,5 @@
+require_relative 'pieces'
+
 class Board
   BOARD_LENGTH = 8
   attr_reader :grid
@@ -21,7 +23,7 @@ class Board
     pos.all? { |coordinate| coordinate.between?(0, BOARD_LENGTH - 1) }
   end
 
-  def has_color_piece(pos, color)
-
+  def has_color_piece?(pos, color)
+    self[pos].color == color
   end
 end
