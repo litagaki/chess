@@ -33,7 +33,7 @@ class Board
   end
 
   def render
-    display_grid = grid.transpose
+    display_grid = grid.transpose.reverse
 
     display_grid.each do |row|
       row.each do |element|
