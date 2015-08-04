@@ -8,6 +8,7 @@ class Piece
     @position = position
     @color = color
     @board = board
+    board[position] = self
   end
 
   def moves
