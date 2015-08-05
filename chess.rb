@@ -15,7 +15,8 @@ require_relative 'bishop'
 
 class Chess
   attr_reader :white_player, :black_player
-  attr_accessor :current_player, :board
+  attr_accessor :current_player, :board, :file_name
+  attr_writer :saving
 
   def initialize
     @white_player = HumanPlayer.new(:white)
@@ -25,7 +26,53 @@ class Chess
     @current_player = white_player
   end
 
+  def save_file
+    puts "What do you want to name your file?"
+    self.file_name = gets.chomp
+    saved_game = self.to_yaml
+    File.open(file_name, 'w') {|f| f << saved_game}
+  end
+
+  def auto_save
+    saved_game = self.to_yaml
+    File.open(file_name, 'w') {|f| f << saved_game}
+  end
+
+  def load_file
+    puts "What is the name of the file you want to load?"
+    self.file_name = gets.chomp
+    input_data = File.read(file_name)
+    loaded_game = YAML::load(input_data)
+    self.board = loaded_game.board
+    self.current_player = loaded_game.current_player
+  end
+
+  def save_request
+    puts "To save your game as you go press S, otherwise press any key "
+    response = gets.chomp.upcase
+    if response == "S"
+      self.saving = true
+      save_file
+    end
+  end
+
+  def load_request
+    begin
+      puts "To load saved game press L, otherwise press any key"
+      response = gets.chomp.upcase
+      if response == "L"
+        self.saving = true
+        load_file
+      end
+    rescue IOError => e
+      puts e.message
+      retry
+    end
+  end
+
   def play
+    load_request
+    save_request unless saving?
     until game_over?
       begin
         board.render
@@ -37,6 +84,7 @@ class Chess
        retry
      end
       swap_players
+      auto_save if saving?
     end
 
     puts "GAME OVER: #{current_player.color} won!"
@@ -60,6 +108,12 @@ class Chess
     else
       self.current_player = white_player
     end
+  end
+
+  private
+
+  def saving?
+    @saving
   end
 
 end
