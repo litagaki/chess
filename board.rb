@@ -2,16 +2,22 @@ class Board
   BOARD_LENGTH = 8
   attr_reader :grid
 
-  BISHOP_POSITIONS = [2,5]
-  ROOK_POSITIONS = [0,7]
-  KNIGHT_POSITIONS = [1,6]
-  KING_POSITION = 4
-  QUEEN_POSITION = 3
-  VIP_POSITIONS = {
+  VIP_COLUMNS = [
+    "Rook",
+    "Knight",
+    "Bishop",
+    "Queen",
+    "King",
+    "Bishop",
+    "Knight",
+    "Rook"
+  ]
+
+  VIP_ROWS = {
     :white => 0,
     :black => 7
     }
-  PAWN_POSITIONS = {
+  PAWN_ROWS = {
     :white => 1,
     :black => 6
     }
@@ -34,25 +40,16 @@ class Board
 
   def initialize
     @grid = Array.new(BOARD_LENGTH) { Array.new(BOARD_LENGTH) }
-    self
   end
 
   def populate_board
-    VIP_POSITIONS.each do |color,y|
-      BISHOP_POSITIONS.each do |x|
-        Bishop.new([x,y],color,self)
+    VIP_ROWS.each do |color, y|
+      VIP_COLUMNS.each_with_index do |piece_type, x|
+        Object.const_get(piece_type).new([x,y],color,self)
       end
-      KNIGHT_POSITIONS.each do |x|
-        Knight.new([x,y],color,self)
-      end
-      ROOK_POSITIONS.each do |x|
-        Rook.new([x,y],color,self)
-      end
-      King.new([KING_POSITION,y],color,self)
-      Queen.new([QUEEN_POSITION,y],color,self)
     end
 
-    PAWN_POSITIONS.each do |color, y|
+    PAWN_ROWS.each do |color, y|
       (0...BOARD_LENGTH).each do |x|
         Pawn.new([x,y],color,self)
       end
@@ -80,7 +77,7 @@ class Board
   end
 
   def has_color_piece?(pos, color)
-    self[pos] ? self[pos].color == color : false
+    self[pos] && self[pos].color == color
   end
 
   def has_opponent_piece?(pos,color)
@@ -108,19 +105,17 @@ class Board
 
   def move(start, end_pos)
     piece = self[start]
+    raise ArgumentError.new("Error: No piece at start") if piece.nil?
 
     if piece.move_into_check?(end_pos)
-      raise ArgumentError.new("Moving into check!")
+      raise ArgumentError.new("Error: Moving into check!")
     end
 
-    raise ArgumentError.new("No piece at start") if piece.nil?
     unless piece.moves.include?(end_pos)
-      raise ArgumentError.new("Piece cannot move to end position")
+      raise ArgumentError.new("Error: Piece cannot move to end position")
     end
 
-    piece.position = end_pos
-    self[start] = nil
-    self[end_pos] = piece
+    move!(start, end_pos)
   end
 
   def move!(start, end_pos)
