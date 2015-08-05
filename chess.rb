@@ -84,32 +84,40 @@ class Chess
   def play
     load_request
     save_request unless saving?
-    until game_over?
-      begin
-        board.render
-        castling
-          unless castled
-            start_move, end_move = current_player.player_input
-            check_piece_ownership(start_move)
-            board.move(start_move, end_move)
-          end
-          self.castled = false
-     rescue ChessError => e
-       puts e.message
-       retry
-     end
-      pawn_promotion(end_move) if board.upgradable_pawn?
-      swap_players
-      auto_save if saving?
-      exit_prompt
-    end
+    turn until game_over?
+    postgame_report
 
+    nil
+  end
+
+  def turn
+    begin
+      board.render
+      castling
+        unless castled
+          start_move, end_move = current_player.player_input
+          check_piece_ownership(start_move)
+          board.move(start_move, end_move)
+        end
+        self.castled = false
+   rescue ChessError => e
+     puts e.message
+     retry
+   end
+    pawn_promotion(end_move) if board.upgradable_pawn?
+    swap_players
+    auto_save if saving?
+    exit_prompt
+  end
+
+  def postgame_report
     if board.stalemate?(current_player.color)
       puts "GAME OVER: STALEMATE"
     else
       puts "GAME OVER: #{current_player.color} won!"
     end
     board.render
+
     nil
   end
 
