@@ -121,6 +121,22 @@ class Board
     self[end_pos] = piece
   end
 
+  def castle_move(rook_pos)
+    rook_x, y = rook_pos
+    king_x = 4
+    if rook_x == 0
+      new_rook_x = 3
+      new_king_x = 2
+    elsif rook_x ==7
+      new_rook_x = 5
+      new_king_x = 6
+    else
+      raise ChessError.new("Rook not in suitable castling position")
+    end
+    move!([rook_x,y],[new_rook_x,y]) #Move rook
+    move!([king_x,y],[new_king_x,y]) #Move king
+  end
+
   def checkmate?(color)
     return false unless in_check?(color)
 
@@ -128,6 +144,15 @@ class Board
 
     current_pieces.all? {|piece| piece.valid_moves.empty? }
   end
+
+  def stalemate?(color)
+    return false if in_check?(color)
+
+    current_pieces = pieces_list.select {|piece| piece.color == color }
+
+    current_pieces.all? {|piece| piece.valid_moves.empty? }
+  end
+
 
   def king(color)
     king = pieces_list.find do |element|
@@ -170,7 +195,6 @@ class Board
     #look in original rook positions
     rook1 = self[[ ROOK_COLUMNS[0],VIP_ROWS[color] ]]
     rook2 = self[[ ROOK_COLUMNS[1],VIP_ROWS[color] ]]
-    p rook2
 
     unless king.has_moved? || in_check?(color) #checks to see if king has moved
       if rook1.class == Rook && !rook1.has_moved?

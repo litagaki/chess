@@ -15,15 +15,24 @@ require_relative 'bishop'
 
 class Chess
   attr_reader :white_player, :black_player
-  attr_accessor :current_player, :board, :file_name
-  attr_writer :saving
+  attr_accessor :current_player, :board, :file_name, :castled
+  attr_writer :saving,
 
   def initialize
     @white_player = HumanPlayer.new(:white)
     @black_player = HumanPlayer.new(:black)
     @board = Board.new
-    board.populate_board
+    #board.populate_board
+
+    r = Rook.new([0,0], :white, board)
+    k2 = King.new([4,7], :black, board)
+    k = King.new([4,0],:white, board)
+    #r2 = Rook.new([2,2], :black, board)
+    a = Rook.new([7,0], :white, board)
+
+
     @current_player = white_player
+    @castled = false
   end
 
   def save_file
@@ -76,9 +85,13 @@ class Chess
     until game_over?
       begin
         board.render
-        start_move, end_move = current_player.player_input
-        check_piece_ownership(start_move)
-        board.move(start_move, end_move)
+        castling
+          unless castled
+            start_move, end_move = current_player.player_input
+            check_piece_ownership(start_move)
+            board.move(start_move, end_move)
+          end
+          self.castled = false
      rescue ChessError => e
        puts e.message
        retry
@@ -131,6 +144,10 @@ class Chess
     end
   end
 
+  def castled?
+    @castled
+  end
+
   def game_over?
     board.checkmate?(:white) || board.checkmate?(:black)
   end
@@ -140,6 +157,30 @@ class Chess
       self.current_player = black_player
     else
       self.current_player = white_player
+    end
+  end
+
+  def castling
+    castle_options = board.castleable_rook_pos(current_player.color)
+    if castle_options.size == 1
+      puts "You can castle with your Rook and King."
+      puts "Enter Y if you'd like to, otherwise press any key"
+      response = gets.chomp.upcase
+      if response == "Y"
+        board.castle_move(castle_options.first)
+        self.castled = true
+      end
+    elsif castle_options.size == 2
+      puts "You can castle with both rooks."
+      puts "Enter L for left castle, R for right castle, otherwise press any key"
+      response = gets.chomp.upcase
+      if response == "L"
+        board.castle_move(castle_options.first)
+        self.castled = true
+      elsif response == "R"
+        board.castle_move(castle_options.last)
+        self.castled = true
+      end
     end
   end
 end
