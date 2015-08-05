@@ -22,14 +22,13 @@ class Chess
     @white_player = HumanPlayer.new(:white)
     @black_player = HumanPlayer.new(:black)
     @board = Board.new
-    board.populate_board
+    #board.populate_board
 
-    # 
-    # k2 = King.new([2,7], :black, board)
-    # k = King.new([4,2],:white, board)
-    # #r2 = Rook.new([2,2], :black, board)
-    # q = Queen.new([3,4], :white, board)
-    # b = Bishop.new([4,4],:white,board)
+    r = Rook.new([0,0], :white, board)
+    k = King.new([4,7],:black, board)
+    k = King.new([4,0],:white, board)
+    #r2 = Rook.new([2,2], :black, board)
+    a = Rook.new([7,0], :white, board)
 
 
     @current_player = white_player
@@ -169,26 +168,16 @@ class Chess
 
   def castling
     castle_options = board.castleable_rook_pos(current_player.color)
-    if castle_options.size == 1
-      puts "You can castle with your Rook and King."
-      puts "Enter Y if you'd like to, otherwise press any key"
-      response = gets.chomp.upcase
-      if response == "Y"
-        board.castle_move(castle_options.first)
-        self.castled = true
-      end
-    elsif castle_options.size == 2
-      puts "You can castle with both rooks."
-      puts "Enter L for left castle, R for right castle, otherwise press any key"
-      response = gets.chomp.upcase
-      if response == "L"
-        board.castle_move(castle_options.first)
-        self.castled = true
-      elsif response == "R"
-        board.castle_move(castle_options.last)
-        self.castled = true
-      end
+    input = current_player.castling_input(castle_options)
+    if input == 1
+      board.castle_move(castle_options.first)
+      self.castled = true
+    elsif input == 2
+      board.castle_move(castle_options.last)
+      self.castled = true
     end
+
+    nil
   end
 end
 
@@ -197,6 +186,21 @@ class HumanPlayer
 
   def initialize(color)
     @color = color
+  end
+
+  def castling_input(castle_options)
+    if castle_options.size == 1
+      puts "You can castle with your Rook and King."
+      puts "Enter Y if you'd like to, otherwise press any key"
+      response = gets.chomp.upcase
+      return 1 if response == "Y"
+    elsif castle_options.size == 2
+      puts "You can castle with both rooks."
+      puts "Enter L for left castle, R for right castle, otherwise press any key"
+      response = gets.chomp.upcase
+      return 1 if response == "L"
+      return 2 if response == "R"
+    end
   end
 
   def player_input
