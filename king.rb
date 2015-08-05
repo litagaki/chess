@@ -1,5 +1,3 @@
-require_relative 'stepping_pieces'
-
 class King < SteppingPiece
   DELTAS = [
     [-1, -1],

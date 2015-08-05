@@ -1,6 +1,3 @@
-require_relative 'pieces'
-require 'byebug'
-
 class Pawn < Piece
   DELTA_X = [-1, 1]
 

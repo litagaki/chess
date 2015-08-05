@@ -1,6 +1,3 @@
-require_relative 'pieces'
-require 'byebug'
-
 class SteppingPiece < Piece
   def moves
     valid_moves = []

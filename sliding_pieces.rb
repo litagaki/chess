@@ -1,6 +1,3 @@
-require_relative 'pieces'
-require 'byebug'
-
 class SlidingPiece < Piece
   ORTHOGONAL_DELTAS = [
     [ 1, 0],

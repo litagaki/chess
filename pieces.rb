@@ -1,6 +1,3 @@
-require 'byebug'
-require_relative 'board'
-
 class Piece
   attr_accessor :board, :position
   attr_reader :color

@@ -1,4 +1,3 @@
-require 'colorize'
 class Board
   BOARD_LENGTH = 8
   attr_reader :grid
@@ -81,7 +80,7 @@ class Board
 
   def render
     display_grid = grid.transpose.reverse
-    
+
     display_grid.each_with_index do |row, row_number|
         print "#{8-row_number}"
       row.each_with_index do |element,col_number|

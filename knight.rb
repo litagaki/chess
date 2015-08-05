@@ -1,5 +1,3 @@
-require_relative 'stepping_pieces'
-
 class Knight < SteppingPiece
   DELTAS = [
     [-2, -1],
