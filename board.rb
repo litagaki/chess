@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Board
   BOARD_LENGTH = 8
   attr_reader :grid
@@ -12,7 +14,7 @@ class Board
     "Knight",
     "Rook"
   ]
-
+  ROOK_COLUMNS = [0, 7]
   VIP_ROWS = {
     :white => 0,
     :black => 7
@@ -127,15 +129,19 @@ class Board
     current_pieces.all? {|piece| piece.valid_moves.empty? }
   end
 
-  def in_check?(color)
+  def king(color)
     king = pieces_list.find do |element|
       element.class == King && element.color == color
     end
+  end
 
-    king_pos = king.position
+  def in_check?(color)
+    king_pos = king(color).position
+
     pieces_list.each do |element|
       return true if element.color != color && element.moves.include?(king_pos)
     end
+
     false
   end
 
@@ -147,11 +153,51 @@ class Board
     end
   end
 
-  def can_castle?(color)
 
+  # VIP_ROWS = {
+  #   :white => 0,
+  #   :black => 7
+  #   }
+
+  #king.move_into_check?(end_pos)
+
+  def castleable_rook_pos(color)
+
+    rook_positions = []
+
+    king = king(color)
+
+    #look in original rook positions
+    rook1 = self[[ ROOK_COLUMNS[0],VIP_ROWS[color] ]]
+    rook2 = self[[ ROOK_COLUMNS[1],VIP_ROWS[color] ]]
+    p rook2
+
+    unless king.has_moved? || in_check?(color) #checks to see if king has moved
+      if rook1.class == Rook && !rook1.has_moved?
+        castleable = true
+        castleable = false if self[[ 1,VIP_ROWS[color] ]]
+        castleable = false if !is_safe_king_place?(king,2,color)
+        castleable = false if !is_safe_king_place?(king,3,color)
+        rook_positions << rook1.position if castleable
+      end
+      if rook2.class == Rook && !rook2.has_moved?
+        castleable = true
+        castleable = false if !is_safe_king_place?(king,5,color)
+        castleable = false if !is_safe_king_place?(king,6,color)
+        rook_positions << rook2.position if castleable
+      end
+    end
+
+
+    rook_positions
   end
 
   private
+
+  def is_safe_king_place?(king_piece,x_pos,color)
+    return !( self[[ x_pos,VIP_ROWS[color] ]] ||
+       king_piece.move_into_check?([x_pos,VIP_ROWS[color] ] ) )
+  end
 
   def pieces_list
     grid.flatten.compact
