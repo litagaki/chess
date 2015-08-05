@@ -26,22 +26,6 @@ class Board
     pos.all? { |coordinate| coordinate.between?(0, BOARD_LENGTH - 1) }
   end
 
-  def self.dup(board)
-    new_board = Board.new
-
-    board.grid.each_with_index do |row, row_number|
-      row.each_with_index do |element, column_number|
-        if element
-          new_element = element.dup
-          new_element.board = new_board
-          new_board[[row_number,column_number]] = new_element
-        end
-      end
-    end
-
-    new_board
-  end
-
   def initialize
     @grid = Array.new(BOARD_LENGTH) { Array.new(BOARD_LENGTH) }
   end
@@ -60,6 +44,16 @@ class Board
     end
 
     self
+  end
+
+  def dup
+    new_board = Board.new
+
+    pieces_list.each do |piece|
+      piece.class.new(piece.position, piece.color, new_board)
+    end
+
+    new_board
   end
 
   def [](pos)
@@ -139,7 +133,7 @@ class Board
   end
 
   def in_check?(color)
-    king = grid.flatten.find do |element|
+    king = pieces_list.find do |element|
       element.class == King && element.color == color
     end
 
