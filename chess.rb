@@ -22,13 +22,14 @@ class Chess
     @white_player = HumanPlayer.new(:white)
     @black_player = HumanPlayer.new(:black)
     @board = Board.new
-    #board.populate_board
+    board.populate_board
 
-    r = Rook.new([0,0], :white, board)
-    k2 = King.new([4,7], :black, board)
-    k = King.new([4,0],:white, board)
-    #r2 = Rook.new([2,2], :black, board)
-    a = Rook.new([7,0], :white, board)
+    # 
+    # k2 = King.new([2,7], :black, board)
+    # k = King.new([4,2],:white, board)
+    # #r2 = Rook.new([2,2], :black, board)
+    # q = Queen.new([3,4], :white, board)
+    # b = Bishop.new([4,4],:white,board)
 
 
     @current_player = white_player
@@ -99,10 +100,14 @@ class Chess
       pawn_promotion(end_move) if board.upgradable_pawn?
       swap_players
       auto_save if saving?
-      #exit_prompt
+      exit_prompt
     end
 
-    puts "GAME OVER: #{current_player.color} won!"
+    if board.stalemate?(current_player.color)
+      puts "GAME OVER: STALEMATE"
+    else
+      puts "GAME OVER: #{current_player.color} won!"
+    end
     board.render
     nil
   end
@@ -149,7 +154,9 @@ class Chess
   end
 
   def game_over?
-    board.checkmate?(:white) || board.checkmate?(:black)
+    board.checkmate?(:white) ||
+    board.checkmate?(:black) ||
+    board.stalemate?(current_player.color)
   end
 
   def swap_players
