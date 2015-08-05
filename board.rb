@@ -1,9 +1,20 @@
-require_relative 'pieces'
-
 class Board
   BOARD_LENGTH = 8
   attr_reader :grid
-  #ROOK_POSITIONS = []
+
+  BISHOP_POSITIONS = [2,5]
+  ROOK_POSITIONS = [0,7]
+  KNIGHT_POSITIONS = [1,6]
+  KING_POSITION = 4
+  QUEEN_POSITION = 3
+  VIP_POSITIONS = {
+    :white => 0,
+    :black => 7
+    }
+  PAWN_POSITIONS = {
+    :white => 1,
+    :black => 6
+    }
 
   def self.dup(board)
     new_board = Board.new
@@ -23,10 +34,32 @@ class Board
 
   def initialize
     @grid = Array.new(BOARD_LENGTH) { Array.new(BOARD_LENGTH) }
-    #populate board
+    self
   end
 
+  def populate_board
+    VIP_POSITIONS.each do |color,y|
+      BISHOP_POSITIONS.each do |x|
+        Bishop.new([x,y],color,self)
+      end
+      KNIGHT_POSITIONS.each do |x|
+        Knight.new([x,y],color,self)
+      end
+      ROOK_POSITIONS.each do |x|
+        Rook.new([x,y],color,self)
+      end
+      King.new([KING_POSITION,y],color,self)
+      Queen.new([QUEEN_POSITION,y],color,self)
+    end
 
+    PAWN_POSITIONS.each do |color, y|
+      (0...BOARD_LENGTH).each do |x|
+        Pawn.new([x,y],color,self)
+      end
+    end
+
+    self
+  end
 
   def [](pos)
     x,y = pos
@@ -57,7 +90,7 @@ class Board
   def render
     display_grid = grid.transpose.reverse
     display_grid.each_with_index do |row, row_number|
-        print "#{7-row_number}"
+        print "#{8-row_number}"
       row.each do |element|
         if element
           print " #{element.to_s} "
@@ -67,7 +100,7 @@ class Board
       end
       puts
     end
-    puts "  0  1  2  3  4  5  6  7"
+    puts "  A  B  C  D  E  F  G  H"
     nil
   end
 

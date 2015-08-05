@@ -27,11 +27,12 @@ class Chess
       begin
         board.render
         start_move, end_move = current_player.player_input
+        check_valid_piece(start_move)
         board.move(start_move, end_move)
-      rescue ArgumentError => e
-        puts e.message
-        retry
-      end
+     rescue StandardError => e
+       puts e.message
+       retry
+     end
       swap_players
     end
 
@@ -39,14 +40,25 @@ class Chess
     nil
   end
 
+  def check_valid_piece(start_pos)
+    if !board.has_piece?(start_pos)
+      raise ArgumentError.new("Error: no piece present!")
+    elsif board.has_opponent_piece?(start_pos, current_player.color)
+      raise ArgumentError.new("Error: not your piece!")
+    end
+  end
+
   def game_over?
     board.checkmate?(:white) || board.checkmate?(:black)
   end
 
   def swap_players
-    current_player == white_player ? black_player : white_player
+    if current_player == white_player
+      self.current_player = black_player
+    else
+      self.current_player = white_player
+    end
   end
-
 
 end
 
@@ -58,11 +70,34 @@ class HumanPlayer
   end
 
   def player_input
-    puts "#{color.to_s.capitalize}: Please input a starting position x y"
-    start_pos = gets.chomp.split(" ").map! { |value| Integer(value) }
-    puts "Please input an ending position x y"
-    end_pos = gets.chomp.split(" ").map! { |value| Integer(value) }
+    begin
+      puts "#{color.to_s.capitalize}: Please input a starting position (Ex: f8)"
+      start_pos = input_to_position(gets.chomp)
+    rescue
+      puts "Invalid input -- Give valid board position (Ex: a6)"
+      retry
+    end
+    begin
+      puts "Please input an ending position (Ex: f9)"
+      end_pos = input_to_position(gets.chomp)
+    rescue
+      puts "Invalid input -- Give valid board position (Ex: a6)"
+      retry
+    end
     [start_pos, end_pos]
+  end
+
+  def input_to_position(input)
+    raise ArgumentError if input.empty? || input.length > 2
+    x, y = input.split("")
+    x = x.downcase.ord - 97
+    raise ArgumentError unless x.between?(0,Board::BOARD_LENGTH - 1)
+    raise ArgumentError if y.nil?
+
+    y = Integer(y) - 1
+    raise ArgumentError unless y.between?(0,Board::BOARD_LENGTH - 1)
+
+    [x,y]
   end
 end
 
