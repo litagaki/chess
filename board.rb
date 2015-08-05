@@ -78,11 +78,11 @@ class Board
   end
 
   def has_color_piece?(pos, color)
-    self[pos] && self[pos].color == color
+    has_piece?(pos) && self[pos].color == color
   end
 
   def has_opponent_piece?(pos,color)
-    has_piece?(pos) && !has_color_piece?(pos,color)
+    has_piece?(pos) && self[pos].color != color
   end
 
   def render
