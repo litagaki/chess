@@ -106,14 +106,14 @@ class Board
 
   def move(start, end_pos)
     piece = self[start]
-    raise ArgumentError.new("Error: No piece at start") if piece.nil?
+    raise ChessError.new("Error: No piece at start") if piece.nil?
 
     if piece.move_into_check?(end_pos)
-      raise ArgumentError.new("Error: Moving into check!")
+      raise ChessError.new("Error: Moving into check!")
     end
 
     unless piece.moves.include?(end_pos)
-      raise ArgumentError.new("Error: Piece cannot move to end position")
+      raise ChessError.new("Error: Piece cannot move to end position")
     end
 
     move!(start, end_pos)
@@ -146,4 +146,7 @@ class Board
     false
   end
 
+end
+
+class ChessError < StandardError
 end

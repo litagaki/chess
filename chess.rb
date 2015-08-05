@@ -29,7 +29,7 @@ class Chess
         start_move, end_move = current_player.player_input
         check_piece_ownership(start_move)
         board.move(start_move, end_move)
-     rescue StandardError => e
+     rescue ChessError => e
        puts e.message
        retry
      end
@@ -43,7 +43,7 @@ class Chess
 
   def check_piece_ownership(start_pos)
     if board.has_opponent_piece?(start_pos, current_player.color)
-      raise ArgumentError.new("Error: not your piece!")
+      raise ChessError.new("Error: not your piece!")
     end
   end
 
@@ -72,7 +72,7 @@ class HumanPlayer
     begin
       puts "#{color.to_s.capitalize}: Please input a starting position (Ex: f8)"
       start_pos = input_to_position(gets.chomp)
-    rescue
+    rescue ChessError
       puts "Invalid input -- Give valid board position (Ex: a6)"
       retry
     end
@@ -80,7 +80,7 @@ class HumanPlayer
     begin
       puts "Please input an ending position (Ex: f9)"
       end_pos = input_to_position(gets.chomp)
-    rescue
+    rescue ChessError
       puts "Invalid input -- Give valid board position (Ex: a6)"
       retry
     end
@@ -89,12 +89,12 @@ class HumanPlayer
   end
 
   def input_to_position(input)
-    raise ArgumentError unless input.length == 2
+    raise ChessError unless input.length == 2
     x, y = input.split("")
     x = x.downcase.ord - 97
-    
+
     y = Integer(y) - 1
-    raise ArgumentError unless Board.on_board?([x,y])
+    raise ChessError unless Board.on_board?([x,y])
 
     [x,y]
   end
