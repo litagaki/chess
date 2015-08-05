@@ -139,6 +139,14 @@ class Board
     false
   end
 
+  def upgradable_pawn?
+    VIP_ROWS.values.any? do |row|
+      (0...BOARD_LENGTH).any? do |column|
+        self[[column, row]].class == Pawn
+      end
+    end
+  end
+
   private
 
   def pieces_list

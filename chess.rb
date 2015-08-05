@@ -83,9 +83,10 @@ class Chess
        puts e.message
        retry
      end
+      pawn_promotion(end_move) if board.upgradable_pawn?
       swap_players
       auto_save if saving?
-      exit_prompt
+      #exit_prompt
     end
 
     puts "GAME OVER: #{current_player.color} won!"
@@ -93,9 +94,35 @@ class Chess
     nil
   end
 
+  private
+
+  def saving?
+    @saving
+  end
+
+  def pawn_promotion(pawn_pos)
+    input = ""
+
+    until is_valid_promotion?(input)
+      puts "How would you like to upgrade? (Knight/Bishop/Rook/Queen)"
+      input = gets.chomp.downcase.capitalize
+    end
+
+    board[pawn_pos] = Object.const_get(input).new(pawn_pos,current_player.color,board)
+  end
+
+  def is_valid_promotion?(input)
+    ["Bishop","Knight","Rook","Queen"].include?(input)
+  end
+
   def exit_prompt
-    puts "To exit press E otherwise press any key"
-    exit if gets.chomp.upcase == "E"
+    puts "To exit press E, to forfeit press F, otherwise press any key"
+    choice = gets.chomp.upcase
+    exit if choice == "E"
+    if choice == "F"
+      puts "You forfeit!"
+      exit
+    end
   end
 
   def check_piece_ownership(start_pos)
@@ -115,13 +142,6 @@ class Chess
       self.current_player = white_player
     end
   end
-
-  private
-
-  def saving?
-    @saving
-  end
-
 end
 
 class HumanPlayer
