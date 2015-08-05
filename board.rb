@@ -85,6 +85,10 @@ class Board
     has_piece?(pos) && self[pos].color != color
   end
 
+  def pieces_list
+    grid.flatten.compact
+  end
+
   def render
     display_grid = grid.transpose.reverse
     display_grid.each_with_index do |row, row_number|
@@ -129,7 +133,7 @@ class Board
   def checkmate?(color)
     return false unless in_check?(color)
 
-    current_pieces = grid.flatten.compact.select {|piece| piece.color == color }
+    current_pieces = pieces_list.select {|piece| piece.color == color }
 
     current_pieces.all? {|piece| piece.valid_moves.empty? }
   end
@@ -140,7 +144,7 @@ class Board
     end
 
     king_pos = king.position
-    grid.flatten.compact.each do |element|
+    pieces_list.each do |element|
       return true if element.color != color && element.moves.include?(king_pos)
     end
     false
