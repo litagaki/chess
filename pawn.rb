@@ -31,7 +31,7 @@ class Pawn < Piece
     attr_reader :dy
 
     def valid_forward_move?(pos)
-      board.on_board?(pos) && !board.has_piece?(pos)
+      Board.on_board?(pos) && !board.has_piece?(pos)
     end
 
     def diagonal_moves
@@ -40,7 +40,7 @@ class Pawn < Piece
 
       DELTA_X.each do |dx|
         next_pos = [x + dx, y + dy]
-        if board.on_board?(next_pos) && board.has_opponent_piece?(next_pos,color)
+        if Board.on_board?(next_pos) && board.has_opponent_piece?(next_pos,color)
           valid_diagonal_moves << next_pos
         end
       end

@@ -22,6 +22,10 @@ class Board
     :black => 6
     }
 
+  def self.on_board?(pos)
+    pos.all? { |coordinate| coordinate.between?(0, BOARD_LENGTH - 1) }
+  end
+
   def self.dup(board)
     new_board = Board.new
 
@@ -68,9 +72,6 @@ class Board
     grid[x][y] = value
   end
 
-  def on_board?(pos)
-    pos.all? { |coordinate| coordinate.between?(0, BOARD_LENGTH - 1) }
-  end
 
   def has_piece?(pos)
     self[pos]

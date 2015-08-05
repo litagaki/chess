@@ -25,7 +25,7 @@ class SlidingPiece < Piece
       distance = 1
       new_pos = [x + dx * distance, y + dy * distance]
 
-      until new_pos && !board.on_board?(new_pos)
+      until new_pos && !Board.on_board?(new_pos)
         break if board.has_color_piece?(new_pos, color)
         valid_moves << new_pos
         break if board.has_opponent_piece?(new_pos,color)
