@@ -85,11 +85,17 @@ class Chess
      end
       swap_players
       auto_save if saving?
+      exit_prompt
     end
 
     puts "GAME OVER: #{current_player.color} won!"
     board.render
     nil
+  end
+
+  def exit_prompt
+    puts "To exit press E otherwise press any key"
+    exit if gets.chomp.upcase == "E"
   end
 
   def check_piece_ownership(start_pos)
