@@ -135,11 +135,11 @@ class Board
   end
 
   def in_check?(color)
-    king = grid.flatten.select do |element|
+    king = grid.flatten.find do |element|
       element.class == King && element.color == color
     end
 
-    king_pos = king.first.position
+    king_pos = king.position
     grid.flatten.compact.each do |element|
       return true if element.color != color && element.moves.include?(king_pos)
     end
