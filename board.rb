@@ -147,6 +147,10 @@ class Board
     end
   end
 
+  def can_castle?(color)
+
+  end
+
   private
 
   def pieces_list

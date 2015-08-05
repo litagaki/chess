@@ -7,8 +7,18 @@ class Piece
     @color = color
     @board = board
     board[position] = self
+    @has_moved = false
   end
 
+  def has_moved?
+    @has_moved
+  end
+
+  def position=(pos)
+    @position = pos
+    @has_moved = true
+  end
+  
   def moves
     raise NotImplementedError
   end

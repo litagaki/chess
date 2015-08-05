@@ -3,17 +3,7 @@ class Pawn < Piece
 
   def initialize(position, color, board)
     super(position, color, board)
-    @has_moved = false
     @dy = color == :white ? 1 : -1
-  end
-
-  def has_moved?
-    @has_moved
-  end
-
-  def position=(pos)
-    @position = pos
-    @has_moved = true
   end
 
   def moves
