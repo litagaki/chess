@@ -1,3 +1,4 @@
+require 'colorize'
 class Board
   BOARD_LENGTH = 8
   attr_reader :grid
@@ -66,7 +67,6 @@ class Board
     grid[x][y] = value
   end
 
-
   def has_piece?(pos)
     self[pos]
   end
@@ -79,19 +79,17 @@ class Board
     has_piece?(pos) && self[pos].color != color
   end
 
-  def pieces_list
-    grid.flatten.compact
-  end
-
   def render
     display_grid = grid.transpose.reverse
+    
     display_grid.each_with_index do |row, row_number|
         print "#{8-row_number}"
-      row.each do |element|
+      row.each_with_index do |element,col_number|
+        row_col_sum = row_number + col_number
         if element
-          print " #{element.to_s} "
+          print " #{element.to_s} ".tileize(row_col_sum)
         else
-          print " _ "
+          print "   ".tileize(row_col_sum)
         end
       end
       puts
@@ -99,8 +97,6 @@ class Board
     puts "  A  B  C  D  E  F  G  H"
     nil
   end
-
-
 
   def move(start, end_pos)
     piece = self[start]
@@ -144,7 +140,23 @@ class Board
     false
   end
 
+  private
+
+  def pieces_list
+    grid.flatten.compact
+  end
+
 end
 
 class ChessError < StandardError
+end
+
+class String
+  def tileize(sum)
+    if sum % 2 == 0
+      self.colorize( :background => :white )
+    else
+      self.colorize( :background => :light_white )
+    end
+  end
 end
